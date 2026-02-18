@@ -61,7 +61,10 @@
 
     <script type="module">
         import * as THREE from 'three';
-
+const Missions = [
+  { id: 1, type: "TIME_TRIAL", target: 1000, timeLimit: 60, reward: 500 },
+  { id: 2, type: "EVADE", policeCount: 2, timeLimit: 120, reward: 1200 }
+];
         // --- GAME STATE ---
         const GameState = {
             speed: 0,
@@ -94,6 +97,14 @@
 
         // --- CAR CREATION ---
         function createCar() {
+function checkMission(){
+  if(currentMission >= Missions.length) return;
+
+  if(car.position.z < -Missions[currentMission].target){
+    alert("Mission " + Missions[currentMission].id + " Complete!");
+    currentMission++;
+  }
+}
             const group = new THREE.Group();
             
             // Body (Chassis) - Using a sleek metallic material
@@ -165,6 +176,7 @@
 
         // --- PHYSICS LOOP ---
         function updatePhysics() {
+        checkMission();
             // Speed Logic
             if (keys.accel) GameState.speed += GameState.acceleration;
             else if (keys.brake) GameState.speed -= GameState.acceleration * 2;
